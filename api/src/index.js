@@ -1,5 +1,7 @@
 const http = require("http");
 const characters = require("./utils/data.js");
+const axios = require("axios");
+const { getCharacterId, getDetailId } = require("./controllers/characters.js");
 
 const PORT = 3001;
 http
@@ -17,14 +19,12 @@ http
       return res.end(JSON.stringify(characters));
     }
     if (param1 === "rickandmorty" && param2 === "character") {
-      // /rickandmorty/character/:id   // 1 al 40
-      const character = characters.find((ch) => {
-        return ch.id === Number(id);
-      });
-      if (character)
-        return res
-          .writeHead(200, { "Content-type": "application/json" })
-          .end(JSON.stringify(character));
+      // console.log("02::::id:", id);
+      return getCharacterId(req, res, id);
+    }
+    if (param1 === "rickandmorty" && param2 === "detail") {
+      // console.log("02::::id:", id);
+      return getDetailId(req, res, id);
     }
 
     return res
