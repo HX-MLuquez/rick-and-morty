@@ -5,9 +5,20 @@ const STATUS_ERROR = 404;
 
 let myFavorites = [];
 
-function postFav(req, res) {
-  const { id, name, status, species, gender, origin, image } = req.body;
+function handleFavorites(swap) {
+  return new Promise((resolve, reject) => {
+    setTimeout(() => {
+      if (swap) resolve(myFavorites);
+      reject("not found favorites");
+    }, 1000);
+  });
+}
+
+async function postFav(req, res) {
+  const favorites = await handleFavorites(true);
+  const { id, name, status, species, gender, origin, image, location } = req.body;
   try {
+    // console.log(":::::::::", id, name, image);
     if (!id || !name || !image) {
       return res
         .status(STATUS_ERROR)
@@ -21,10 +32,11 @@ function postFav(req, res) {
       gender,
       origin,
       image,
+      location
     };
     // console.log(character)
-    myFavorites.push(character);
-    res.status(STATUS_OK).json(myFavorites);
+    favorites.push(character);
+    res.status(STATUS_OK).json(favorites);
   } catch (error) {
     res.status(STATUS_ERROR).json({ message: error });
   }

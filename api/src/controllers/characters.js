@@ -9,30 +9,33 @@ const PASSWORD = process.env.PASSWORD;
 const STATUS_OK = 200;
 const STATUS_ERROR = 404;
 
-function getCharById(req, res) {
-  const { id } = req.params;
+async function getCharById(req, res) {
   try {
-    axios.get(`${URL}${id}`).then(({ data }) => {
-      if (data) {
-        const character = {
-          id: data.id,
-          status: data.status,
-          name: data.name,
-          species: data.species,
-          origin: data.origin?.name,
-          image: data.image,
-          gender: data.gender,
-          location: data.location?.name
-        };
-        res.status(STATUS_OK).json(character);
-      } else {
-        res.status(STATUS_ERROR).json({ message: "character not found" });
-      }
-    });
+    const { id } = req.params;
+    const { data } = await axios.get(`${URL}${id}`);
+    if (data.name) {
+      // console.log("ininininininin")
+      const character = {
+        id: data.id,
+        status: data.status,
+        name: data.name,
+        species: data.species,
+        origin: data.origin?.name,
+        image: data.image,
+        gender: data.gender,
+        location: data.location?.name,
+      };
+      return res.status(STATUS_OK).json(character);
+    }
+    else {
+      res.status(STATUS_ERROR).json({ message: "character not found" });
+    }
   } catch (error) {
-    res.status(500).json({ message: error });
+    res.status(STATUS_ERROR).json({ message: error });
   }
 }
+// edit [{}{}{}] -> map  -> [{},{},{}]
+// filter [{}{}{}] -> filter [{}]
 
 function getAllChar(req, res) {
   try {
