@@ -9,6 +9,7 @@ const PASSWORD = process.env.PASSWORD;
 const STATUS_OK = 200;
 const STATUS_ERROR = 404;
 
+
 async function getCharById(req, res) {
   try {
     const { id } = req.params;
@@ -67,5 +68,5 @@ function getAllChar(req, res) {
 
 module.exports = {
   getCharById,
-  getAllChar,
+  getAllChar
 };
